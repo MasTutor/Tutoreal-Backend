@@ -72,7 +72,7 @@ def check_user(data: UserLoginSchema):
     mycursor.close()
     close_db_connection(mydb, "User")
     if (len(myresult) == 1):
-        res_pass = myresult[0][3]
+        res_pass = myresult[0][10]
         if (password == res_pass):
             return True
     return False
