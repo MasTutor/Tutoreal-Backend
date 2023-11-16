@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Body, Depends, File, UploadFile, Request
+from fastapi import FastAPI, Body, Depends, File, UploadFile, Request, HTTPException
 from fastapi.responses import FileResponse
 from app.auth.jwt_bearer import jwtBearer
 from app.auth.jwt_handler import *
@@ -82,10 +82,7 @@ def user_signup(user : UserSchema = Body(...)):
             "signupToken":signJWT(user.email)
             }
     else:
-        return{
-            "error":"true",
-            "message":"Email already taken 🗿"
-        }
+        raise HTTPException(status_code=409, detail="Bro the email already registered 💀")
     
 @app.post("/user/signin", tags=["user"])
 def user_login(user: UserLoginSchema = Body(...)):
@@ -100,7 +97,4 @@ def user_login(user: UserLoginSchema = Body(...)):
             }}
 
     else:
-        return{
-            "error":"true",
-            "message":"Invalid login details! 🗿"
-        }
+        raise HTTPException(status_code=409, detail="Invalid login details bro 🗿")
