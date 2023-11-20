@@ -1,5 +1,7 @@
 from fastapi import FastAPI, Body, Depends, File, UploadFile, Request, HTTPException
 from fastapi.responses import FileResponse
+from pydantic import BaseModel, EmailStr
+from fastapi_pagination import Page, add_pagination, paginate, Params
 from app.auth.jwt_bearer import jwtBearer
 from app.auth.jwt_handler import *
 from google.cloud import storage
@@ -18,6 +20,7 @@ import os
 import io
 
 users = []
+
 posts = [
     {
         "id": 1,
@@ -46,6 +49,10 @@ app = FastAPI(
     description = "Tutoreal backend api",
     swagger_ui_parameters={"syntaxHighlight.theme": "obsidian"}
     )
+add_pagination(app)
+
+
+
 
 @app.get("/", tags=["welcome"])
 def greet():
@@ -100,15 +107,14 @@ def user_login(user: UserLoginSchema = Body(...)):
         raise HTTPException(status_code=409, detail="Invalid login details bro 🗿")
     
 
-
 @app.get("/tutor/alltutors", tags=["tutor"])
-def get_all_tutors():
+def get_all_tutors(params: Params = Depends()):
     tutors = get_tutor()
     if tutors:
         return {
             "error":"false",
             "message":"successfully fetching datas",
-            "tutors":tutors
+            "tutors":paginate(tutors, params=params)
         }
     else:
         raise HTTPException(status_code=404, detail="Not Found sir 🗿")
