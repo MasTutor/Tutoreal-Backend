@@ -98,3 +98,17 @@ def user_login(user: UserLoginSchema = Body(...)):
 
     else:
         raise HTTPException(status_code=409, detail="Invalid login details bro 🗿")
+    
+
+
+@app.get("/tutor/alltutors", tags=["tutor"])
+def get_all_tutors():
+    tutors = get_tutor()
+    if tutors:
+        return {
+            "error":"false",
+            "message":"successfully fetching datas",
+            "tutors":tutors
+        }
+    else:
+        raise HTTPException(status_code=404, detail="Not Found sir 🗿")

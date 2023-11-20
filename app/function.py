@@ -4,6 +4,7 @@ from app.auth.jwt_bearer import jwtBearer
 from app.auth.jwt_handler import *
 from google.cloud import storage
 from dotenv import load_dotenv
+from app.encryptor import *
 from app.model import *
 from io import BytesIO
 import mysql.connector
@@ -29,6 +30,7 @@ def push_user(data: UserSchema):
     fullname = data.fullname
     email = data.email
     password = data.password
+    password = password_encryption(password)
     hasPenis = data.hasPenis
     resq = (email,)
 
@@ -65,6 +67,7 @@ def check_user(data: UserLoginSchema):
 
     email = data.email
     password = data.password
+    password = password_decryption(password)
     res = (email,)
 
     mycursor.execute("SELECT * FROM User WHERE email= %s", res)
@@ -96,3 +99,28 @@ def get_credentials(data: UserLoginSchema):
         }
     else:
         return{"error" : "what the hell are you trying to do 🗿"}
+    
+
+def get_tutor():
+    mydb=defineDB()
+    mycursor = mydb.cursor()
+    mycursor.execute("SELECT * FROM Tutor ORDER BY id + 0 asc")
+    myresult = mycursor.fetchall()
+    tutors = []
+    for x in myresult:
+        tutor_items = {
+            "id":x[0],
+            "UserId":x[1],
+            "Nama":x[2],
+            "hasPenis":x[3],
+            "AgesRanges":x[4],
+            "Specialization":x[5],
+            "Categories":x[6],
+            "AboutMe":x[8],
+            "SkillsAndExperiences":x[9],
+            "picture":x[10]
+        }
+        tutors.append(tutor_items) 
+    mycursor.close()
+    close_db_connection(mydb, "User")
+    return tutors
