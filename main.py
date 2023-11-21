@@ -1,6 +1,5 @@
 from fastapi import FastAPI, Body, Depends, File, UploadFile, Request, HTTPException
 from fastapi.responses import FileResponse
-from pydantic import BaseModel, EmailStr
 from fastapi_pagination import Page, add_pagination, paginate, Params
 from app.auth.jwt_bearer import jwtBearer
 from app.auth.jwt_handler import *

@@ -25,7 +25,6 @@ import numpy as np
 def push_user(data: UserSchema):
     uid = uuid.uuid4().hex
     mydb = defineDB()
-    username = f"User_{uid}"
     mycursor = mydb.cursor()
     fullname = data.fullname
     email = data.email
@@ -51,8 +50,8 @@ def push_user(data: UserSchema):
         
         return False
     else:
-        query = "INSERT INTO User (Uid, Username, Nama, Email, Password, hasPenis) VALUES (%s, %s, %s, %s, %s, %s);"
-        res = (uid,username,fullname,email,password,hasPenis)
+        query = "INSERT INTO User (Uid, Nama, Email, Password, hasPenis) VALUES (%s, %s, %s, %s, %s);"
+        res = (uid,fullname,email,password,hasPenis)
         mycursor.execute(query, res)
         mydb.commit()
         mycursor.close()
@@ -67,7 +66,6 @@ def check_user(data: UserLoginSchema):
 
     email = data.email
     password = data.password
-    password = password_decryption(password)
     res = (email,)
 
     mycursor.execute("SELECT * FROM User WHERE email= %s", res)
@@ -75,8 +73,9 @@ def check_user(data: UserLoginSchema):
     mycursor.close()
     close_db_connection(mydb, "User")
     if (len(myresult) == 1):
-        res_pass = myresult[0][10]
-        if (password == res_pass):
+        res_pass = myresult[0][9]
+        respassword = password_decryption(res_pass)
+        if (password == respassword):
             return True
     return False
 
@@ -90,7 +89,7 @@ def get_credentials(data: UserLoginSchema):
         mycursor.execute("SELECT * FROM User WHERE email= %s", res)
         myresult = mycursor.fetchall()
         resId = myresult[0][0]
-        resName = myresult[0][1]
+        resName = myresult[0][2]
         mycursor.close()
         close_db_connection(mydb, "User")
         return{
