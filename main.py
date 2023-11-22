@@ -117,3 +117,40 @@ def get_all_tutors(params: Params = Depends()):
         }
     else:
         raise HTTPException(status_code=404, detail="Not Found sir 🗿")
+    
+@app.get("/tutor/specialization", tags=["tutor"])
+def get_tutor_by_specialization(specialization):
+    tutors = get_tutor_by_special(specialization)
+    if tutors:
+        return {
+            "error":"false",
+            "message":"successfully fetching datas",
+            "tutors":tutors
+        }
+    else:
+        raise HTTPException(status_code=404, detail="Not Found sir 🗿")
+    
+
+@app.get("/tutor/category", tags=["tutor"])
+def get_tutors_by_category(category):
+    tutors = get_tutor_by_category(category)
+    if tutors:
+        return {
+            "error":"false",
+            "message":"successfully fetching datas",
+            "tutors":tutors
+        }
+    else:
+        raise HTTPException(status_code=404, detail="Not Found sir 🗿")
+
+@app.get("/tutor/detail", tags=["tutor"])
+def get_tutor_detail(tutor_id):
+    tutor = get_tutor_by_id(tutor_id)
+    if tutor:
+        return {
+            "error":"false",
+            "message":"successfully fetching datas",
+            "detail_tutor":tutor
+        }
+    else:
+        raise HTTPException(status_code=404, detail="Not Found sir 🗿")

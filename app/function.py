@@ -123,3 +123,80 @@ def get_tutor():
     mycursor.close()
     close_db_connection(mydb, "User")
     return tutors
+
+
+
+def get_tutor_by_id(id_Tutor):
+    mydb=defineDB()
+    mycursor = mydb.cursor()
+    res = (id_Tutor,)
+    mycursor.execute("SELECT * FROM Tutor WHERE id = %s ORDER BY id + 0 asc", res)
+    myresult = mycursor.fetchall()
+    tutors = []
+    for x in myresult:
+        tutor_items = {
+            "id":x[0],
+            "UserId":x[1],
+            "Nama":x[2],
+            "hasPenis":x[3],
+            "AgesRanges":x[4],
+            "Specialization":x[5],
+            "Categories":x[6],
+            "AboutMe":x[8],
+            "SkillsAndExperiences":x[9],
+            "picture":x[10]
+        }
+        tutors.append(tutor_items) 
+    mycursor.close()
+    close_db_connection(mydb, "User")
+    return tutors
+
+def get_tutor_by_special(special):
+    mydb=defineDB()
+    mycursor = mydb.cursor()
+    res = (special,)
+    mycursor.execute("SELECT * FROM Tutor WHERE specialization = %s ORDER BY id + 0 asc", res)
+    myresult = mycursor.fetchall()
+    tutors = []
+    for x in myresult:
+        tutor_items = {
+            "id":x[0],
+            "UserId":x[1],
+            "Nama":x[2],
+            "hasPenis":x[3],
+            "AgesRanges":x[4],
+            "Specialization":x[5],
+            "Categories":x[6],
+            "AboutMe":x[8],
+            "SkillsAndExperiences":x[9],
+            "picture":x[10]
+        }
+        tutors.append(tutor_items) 
+    mycursor.close()
+    close_db_connection(mydb, "User")
+    return tutors
+
+def get_tutor_by_category(category):
+    mydb=defineDB()
+    mycursor = mydb.cursor()
+    res = (category,)
+    mycursor.execute("SELECT * FROM Tutor WHERE categories = %s ORDER BY id + 0 asc", res)
+    myresult = mycursor.fetchall()
+    tutors = []
+    for x in myresult:
+        tutor_items = {
+            "id":x[0],
+            "UserId":x[1],
+            "Nama":x[2],
+            "hasPenis":x[3],
+            "AgesRanges":x[4],
+            "Specialization":x[5],
+            "Categories":x[6],
+            "AboutMe":x[8],
+            "SkillsAndExperiences":x[9],
+            "picture":x[10]
+        }
+        tutors.append(tutor_items) 
+    mycursor.close()
+    close_db_connection(mydb, "User")
+    return tutors
