@@ -100,7 +100,7 @@ def get_credentials(data: UserLoginSchema):
         return{"error" : "what the hell are you trying to do 🗿"}
     
 
-def get_tutor():
+def get_tutor(specialization = None, category = None):
     mydb=defineDB()
     mycursor = mydb.cursor()
     mycursor.execute("SELECT * FROM Tutor ORDER BY id + 0 asc")
@@ -119,9 +119,15 @@ def get_tutor():
             "SkillsAndExperiences":x[9],
             "picture":x[10]
         }
-        tutors.append(tutor_items) 
+        if specialization is not None and tutor_items["Specialization"].lower().find(specialization.lower()) != -1:
+            tutors.append(tutor_items)
+        elif specialization is None:
+            tutors.append(tutor_items)
+
     mycursor.close()
     close_db_connection(mydb, "User")
+
+
     return tutors
 
 

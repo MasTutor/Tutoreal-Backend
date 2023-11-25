@@ -107,8 +107,8 @@ def user_login(user: UserLoginSchema = Body(...)):
     
 
 @app.get("/tutor/alltutors", tags=["tutor"])
-def get_all_tutors(params: Params = Depends()):
-    tutors = get_tutor()
+def get_all_tutors(specialization = None,category = None,params: Params = Depends()):
+    tutors = get_tutor(specialization, category)
     if tutors:
         return {
             "error":"false",
