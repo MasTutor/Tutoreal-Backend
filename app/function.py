@@ -120,9 +120,19 @@ def get_tutor(specialization = None, category = None):
             "picture":x[10]
         }
         if specialization is not None and tutor_items["Specialization"].lower().find(specialization.lower()) != -1:
-            tutors.append(tutor_items)
+            if category is not None and tutor_items["Categories"] == category:
+                tutors.append(tutor_items)
+            elif category is None:
+                tutors.append(tutor_items)
+
+       
         elif specialization is None:
-            tutors.append(tutor_items)
+            if category is not None and tutor_items["Categories"] == category:
+                tutors.append(tutor_items)
+            elif category is None:
+                tutors.append(tutor_items)
+
+
 
     mycursor.close()
     close_db_connection(mydb, "User")
