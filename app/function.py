@@ -139,7 +139,8 @@ def get_tutor(specialization = None, category = None):
             "Categories":x[6],
             "AboutMe":x[8],
             "SkillsAndExperiences":x[9],
-            "picture":x[10]
+            "picture":x[10],
+            "price":x[11]
         }
         if specialization is not None and tutor_items["Specialization"].lower().find(specialization.lower()) != -1:
             if category is not None and tutor_items["Categories"] == category:
