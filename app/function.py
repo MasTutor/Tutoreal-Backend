@@ -31,6 +31,7 @@ def push_user(data: UserSchema):
     password = data.password
     password = password_encryption(password)
     hasPenis = data.hasPenis
+    imgURL = data.PhotoURL
     resq = (email,)
 
     mycursor.execute("SELECT * FROM User WHERE email= %s", resq)
@@ -50,8 +51,8 @@ def push_user(data: UserSchema):
         
         return False
     else:
-        query = "INSERT INTO User (Uid, Nama, Email, Password, hasPenis) VALUES (%s, %s, %s, %s, %s);"
-        res = (uid,fullname,email,password,hasPenis)
+        query = "INSERT INTO User (Uid, Nama, Email, Password, hasPenis, Picture) VALUES (%s, %s, %s, %s, %s, %s);"
+        res = (uid,fullname,email,password,hasPenis,imgURL)
         mycursor.execute(query, res)
         mydb.commit()
         mycursor.close()
@@ -59,6 +60,27 @@ def push_user(data: UserSchema):
         
         return True
     
+def get_profile_user(email):
+    mydb=defineDB()
+    mycursor = mydb.cursor()
+    res = (email,)
+    mycursor.execute("SELECT * FROM User WHERE email= %s", res)
+    myresult = mycursor.fetchall()
+    mycursor.close()
+    result_uid = myresult[0][0]
+    result_email = myresult[0][1]
+    result_nama = myresult[0][2]
+    result_gender = myresult[0][4]
+    result_picture = myresult[0][6]
+    return {
+        "uid":result_uid,
+        "nama":result_nama,
+        "email":result_email,
+        "gender":result_gender,
+        "photoURL":result_picture
+    }
+
+
 
 def check_user(data: UserLoginSchema):
     mydb=defineDB()

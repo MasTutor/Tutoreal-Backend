@@ -18,6 +18,9 @@ import jwt
 import os
 import io
 
+ 
+
+
 users = []
 
 posts = [
@@ -51,6 +54,18 @@ app = FastAPI(
 add_pagination(app)
 
 
+@app.get("/decode/", dependencies=[Depends(jwtBearer())], tags=["decode"])
+async def testcoded(request: Request):
+    authorization_header = request.headers["Authorization"]
+    token2 = authorization_header.split(" ")[1]
+    jsonResponse = decode_user(token2)
+    return(jsonResponse["userID"])
+
+def decode_user(token2):
+    decoded_data = jwt.decode(token2,JWT_SECRET,JWT_ALGORITHM)
+    return decoded_data
+
+
 
 
 @app.get("/", tags=["welcome"])
@@ -78,8 +93,10 @@ def greet():
 def testing():
     return posts
 
+
+
 @app.post("/user/signup", tags=["user"])
-def user_signup(user : UserSchema = Body(...)):
+async def user_signup(user : UserSchema = Body(...)):
     users.append(user)
     if push_user(user):
         return {
@@ -154,3 +171,11 @@ def get_tutor_detail(tutor_id):
         }
     else:
         raise HTTPException(status_code=404, detail="Not Found sir 🗿")
+    
+
+@app.get("/user/profile", dependencies=[Depends(jwtBearer())], tags=["profile"])
+async def get_profile(request: Request):
+    authHead = request.headers["Authorization"]
+    authToken = authHead.split(" ")[1]
+    jsonResponse = decode_user(authToken)
+    return get_profile_user(jsonResponse["userID"])

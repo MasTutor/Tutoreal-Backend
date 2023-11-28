@@ -19,14 +19,16 @@ class UserSchema(BaseModel):
     fullname : str = Field(default = None)
     email : EmailStr = Field(default = None)
     password : bytes = Field(default = None)
-    hasPenis : bool = Field(default=None)
+    hasPenis : bool = Field(default = None)
+    PhotoURL : str = Field(default = None)
     class Config:
         the_schema = {
             "user_demo": {
                 "fullname":"deez",
                 "email":"deez@nutz.com",
                 "password":"123",
-                "hasPenis":True
+                "hasPenis":True,
+                "PhotoURL":"https://inilinkphotocoy.com/jpegorsomething"
             }
         }
 
