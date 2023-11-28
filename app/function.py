@@ -72,12 +72,14 @@ def get_profile_user(email):
     result_nama = myresult[0][2]
     result_gender = myresult[0][4]
     result_picture = myresult[0][6]
+    result_number = myresult[0][3]
     return {
         "uid":result_uid,
         "nama":result_nama,
         "email":result_email,
         "gender":result_gender,
-        "photoURL":result_picture
+        "photoURL":result_picture,
+        "noTelp":result_number
     }
 
 
