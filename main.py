@@ -136,7 +136,7 @@ def get_all_tutors(specialization = None,category = None,params: Params = Depend
         return{
             "error":"false",
             "message":"successfully fetching datas",
-            "tutors":[]
+            "tutors":{}
         }
     
 @app.get("/tutor/specialization", tags=["tutor"])
