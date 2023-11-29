@@ -56,10 +56,14 @@ add_pagination(app)
 
 @app.get("/decode/", dependencies=[Depends(jwtBearer())], tags=["decode"])
 async def testcoded(request: Request):
-    authorization_header = request.headers["Authorization"]
-    token2 = authorization_header.split(" ")[1]
-    jsonResponse = decode_user(token2)
-    return(jsonResponse["userID"])
+    try:
+        authorization_header = request.headers["Authorization"]
+        token2 = authorization_header.split(" ")[1]
+        jsonResponse = decode_user(token2)
+        return(jsonResponse["userID"])
+        
+    except: raise HTTPException(status_code=409, detail="AUTH NOT REAL SIR (´。＿。｀)")
+
 
 def decode_user(token2):
     decoded_data = jwt.decode(token2,JWT_SECRET,JWT_ALGORITHM)
@@ -181,31 +185,32 @@ def get_tutor_detail(tutor_id):
 
 @app.get("/user/profile", dependencies=[Depends(jwtBearer())], tags=["profile"])
 async def get_profile(request: Request):
-    authHead = request.headers["Authorization"]
-    authToken = authHead.split(" ")[1]
-    jsonResponse = decode_user(authToken)
-    if jsonResponse:
+    try:
+        authorization_header = request.headers["Authorization"]
+        token2 = authorization_header.split(" ")[1]
+        jsonResponse = decode_user(token2)
         return {
             "error":"false",
             "message":"successfully fetching user data",
             "user_data":get_profile_user(jsonResponse["userID"])
             }
-    else:
-        raise HTTPException(status_code=404, detail="User not Found sir 🗿")
+        
+        
+    except: raise HTTPException(status_code=469, detail="AUTH NOT REAL SIR (´。＿。｀)")
+
 
 @app.get("/user/history", dependencies=[Depends(jwtBearer())], tags=["history"])
 async def get_history(request: Request):
-    authHead = request.headers["Authorization"]
-    authToken = authHead.split(" ")[1]
-    jsonResponse = decode_user(authToken)
-    if jsonResponse:
+    try:
+        authorization_header = request.headers["Authorization"]
+        token2 = authorization_header.split(" ")[1]
+        jsonResponse = decode_user(token2)
         return {
             "error":"false",
             "message":"successfully fetching user data",
             "user_data":get_profile_user(jsonResponse["userID"])
             }
-    else:
-        raise HTTPException(status_code=404, detail="User not Found sir 🗿")
+    except: raise HTTPException(status_code=469, detail="AUTH NOT REAL SIR (´。＿。｀)")
     
 @app.post("/user/new-history", dependencies=[Depends(jwtBearer())], tags=["history"])
 async def post_history(request: Request, user : UserSchema = Body(...)):
