@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field, EmailStr
-
+ 
 
 class PostSchema(BaseModel):
     id : int = Field(default=None)

@@ -133,7 +133,11 @@ def get_all_tutors(specialization = None,category = None,params: Params = Depend
             "tutors":paginate(tutors, params=params)
         }
     else:
-        raise HTTPException(status_code=404, detail="Not Found sir 🗿")
+        return{
+            "error":"false",
+            "message":"successfully fetching datas",
+            "tutors":[]
+        }
     
 @app.get("/tutor/specialization", tags=["tutor"])
 def get_tutor_by_specialization(specialization):
@@ -178,4 +182,39 @@ async def get_profile(request: Request):
     authHead = request.headers["Authorization"]
     authToken = authHead.split(" ")[1]
     jsonResponse = decode_user(authToken)
-    return get_profile_user(jsonResponse["userID"])
+    if jsonResponse:
+        return {
+            "error":"false",
+            "message":"successfully fetching user data",
+            "user_data":get_profile_user(jsonResponse["userID"])
+            }
+    else:
+        raise HTTPException(status_code=404, detail="User not Found sir 🗿")
+
+@app.get("/user/history", dependencies=[Depends(jwtBearer())], tags=["history"])
+async def get_history(request: Request):
+    authHead = request.headers["Authorization"]
+    authToken = authHead.split(" ")[1]
+    jsonResponse = decode_user(authToken)
+    if jsonResponse:
+        return {
+            "error":"false",
+            "message":"successfully fetching user data",
+            "user_data":get_profile_user(jsonResponse["userID"])
+            }
+    else:
+        raise HTTPException(status_code=404, detail="User not Found sir 🗿")
+    
+@app.post("/user/new-history", dependencies=[Depends(jwtBearer())], tags=["history"])
+async def post_history(request: Request, user : UserSchema = Body(...)):
+    authHead = request.headers["Authorization"]
+    authToken = authHead.split(" ")[1]
+    jsonResponse = decode_user(authToken)
+    if jsonResponse:
+        return {
+            "error":"false",
+            "message":"successfully fetching user data",
+            "user_data":get_profile_user(jsonResponse["userID"])
+            }
+    else:
+        raise HTTPException(status_code=404, detail="User not Found sir 🗿")
