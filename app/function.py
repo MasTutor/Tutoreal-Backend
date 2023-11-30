@@ -173,7 +173,6 @@ def get_tutor_by_id(id_Tutor):
     res = (id_Tutor,)
     mycursor.execute("SELECT * FROM Tutor WHERE id = %s ORDER BY id + 0 asc", res)
     myresult = mycursor.fetchall()
-    tutors = []
     for x in myresult:
         tutor_items = {
             "id":x[0],
@@ -187,10 +186,9 @@ def get_tutor_by_id(id_Tutor):
             "SkillsAndExperiences":x[9],
             "picture":x[10]
         }
-        tutors.append(tutor_items) 
     mycursor.close()
     close_db_connection(mydb, "User")
-    return tutors
+    return tutor_items
 
 def get_tutor_by_special(special):
     mydb=defineDB()
