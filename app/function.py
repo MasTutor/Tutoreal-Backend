@@ -104,6 +104,21 @@ def check_user(data: UserLoginSchema):
     return False
 
 
+def check_user_id(email):
+    mydb=defineDB()
+    mycursor = mydb.cursor()
+    res = (email,)
+
+    mycursor.execute("SELECT * FROM User WHERE email= %s", res)
+    myresult = mycursor.fetchall()
+    mycursor.close()
+    close_db_connection(mydb, "User")
+    if (len(myresult) == 1):
+        res_id = myresult[0][0]
+            return res_id
+    return False
+
+
 def get_credentials(data: UserLoginSchema):
     mydb=defineDB()
     if check_user(data):
@@ -234,6 +249,29 @@ def get_tutor_by_category(category):
             "AboutMe":x[8],
             "SkillsAndExperiences":x[9],
             "picture":x[10]
+        }
+        tutors.append(tutor_items) 
+    mycursor.close()
+    close_db_connection(mydb, "User")
+    return tutors
+
+def get_history_user(email):
+    mydb=defineDB()
+    mycursor = mydb.cursor()
+    
+    id = check_user_id(email)
+    res = (id,)
+    mycursor.execute("SELECT * FROM 'History Session' WHERE id = %s ORDER BY id + 0 asc", res)
+    myresult = mycursor.fetchall()
+    tutors = []
+    for x in myresult:
+        tutor_items = {
+            "id":x[0],
+            "UserId":x[1],
+            "TutorId":x[2],
+            "status":x[3],
+            "StartDate":x[4],
+            "EndDate":x[5],
         }
         tutors.append(tutor_items) 
     mycursor.close()

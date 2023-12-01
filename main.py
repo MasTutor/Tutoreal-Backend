@@ -208,7 +208,7 @@ async def get_history(request: Request):
         return {
             "error":"false",
             "message":"successfully fetching user data",
-            "user_data":get_profile_user(jsonResponse["userID"])
+            "user_data":get_history_user(jsonResponse["userID"])
             }
     except: raise HTTPException(status_code=469, detail="AUTH NOT REAL SIR (´。＿。｀)")
     
