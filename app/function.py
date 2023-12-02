@@ -271,7 +271,7 @@ def get_history_user(email):
     mycursor = mydb.cursor()
     id = check_user_id(email)
     res = (id,)
-    mycursor.execute("SELECT * FROM History_Session WHERE UserId = %s ORDER BY id + 0 asc", res)
+    mycursor.execute("SELECT * FROM History_Session WHERE UserId = %s ORDER BY Date ASC", res)
     myresult = mycursor.fetchall()
     tutors = []
     for x in myresult:
@@ -311,3 +311,6 @@ def post_history_user(data: HistorySchema, email):
         "status": status,
         "date":date
     }
+
+def get_profile_user(data: UserSchema, email):
+    mydb=defineDB

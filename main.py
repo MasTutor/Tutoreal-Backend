@@ -198,6 +198,33 @@ async def get_profile(request: Request):
         
     except: raise HTTPException(status_code=469, detail="AUTH NOT REAL SIR (´。＿。｀)")
 
+@app.put("/user/editprofile", dependencies=[Depends(jwtBearer())], tags=["profile"])
+async def put_profile(request: Request, user : UserSchema = Body(...)):
+    try:
+        authorization_header = request.headers["Authorization"]
+        token2 = authorization_header.split(" ")[1]
+        jsonResponse = decode_user(token2)
+        return {
+            "error":"false",
+            "message":"successfully fetching user data",
+            "user_data":put_profile_user(jsonResponse["userID"])
+            }
+        
+        
+    except: raise HTTPException(status_code=469, detail="AUTH NOT REAL SIR (´。＿。｀)")
+
+
+
+    users.append(user)
+    if push_user(user):
+        return {
+            "error":"false",
+            "message":"User Created",
+            "signupToken":signJWT(user.email)
+            }
+    else:
+        raise HTTPException(status_code=409, detail="Bro the email already registered 💀")
+
 
 @app.get("/user/history", dependencies=[Depends(jwtBearer())], tags=["history"])
 async def get_history(request: Request):
@@ -214,14 +241,15 @@ async def get_history(request: Request):
     
 @app.post("/user/new-history", dependencies=[Depends(jwtBearer())], tags=["history"])
 async def post_history(request: Request, post : HistorySchema = Body(...)):
-    authHead = request.headers["Authorization"]
-    authToken = authHead.split(" ")[1]
-    jsonResponse = decode_user(authToken)
-    if jsonResponse:
-        return {
-            "error":"false",
-            "message":"successfully fetching user data",
-            "history_data":post_history_user(post, jsonResponse["userID"])
-            }
-    else:
-        raise HTTPException(status_code=425, detail="unexpected error, check your date format, auth, and ur life decision bro 🗿")
+    try:
+        authHead = request.headers["Authorization"]
+        authToken = authHead.split(" ")[1]
+        jsonResponse = decode_user(authToken)
+        if jsonResponse:
+            return {
+                "error":"false",
+                "message":"successfully fetching user data",
+                "history_data":post_history_user(post, jsonResponse["userID"])
+                }
+    except: raise HTTPException(status_code=425, detail="unexpected error, check your date format, auth, and ur life decision bro 🗿")
+    
