@@ -205,6 +205,17 @@ def get_tutor_by_id(id_Tutor):
     close_db_connection(mydb, "User")
     return tutor_items
 
+def get_tutor_name(id_Tutor):
+    mydb=defineDB()
+    mycursor = mydb.cursor()
+    res = (id_Tutor,)
+    mycursor.execute("SELECT * FROM Tutor WHERE id = %s", res)
+    myresult = mycursor.fetchall()
+    tutor_name = myresult[0][2]
+    mycursor.close()
+    close_db_connection(mydb, "User")
+    return tutor_name
+
 def get_tutor_by_special(special):
     mydb=defineDB()
     mycursor = mydb.cursor()
@@ -258,22 +269,45 @@ def get_tutor_by_category(category):
 def get_history_user(email):
     mydb=defineDB()
     mycursor = mydb.cursor()
-    
     id = check_user_id(email)
     res = (id,)
-    mycursor.execute("SELECT * FROM 'History Session' WHERE id = %s ORDER BY id + 0 asc", res)
+    mycursor.execute("SELECT * FROM History_Session WHERE UserId = %s ORDER BY id + 0 asc", res)
     myresult = mycursor.fetchall()
     tutors = []
     for x in myresult:
         tutor_items = {
             "id":x[0],
-            "UserId":x[1],
-            "TutorId":x[2],
-            "status":x[3],
-            "StartDate":x[4],
-            "EndDate":x[5],
+            "TutorName":x[3],
+            "SessionName":x[1],
+            "status":x[4],
+            "Date":x[5]
         }
-        tutors.append(tutor_items) 
+        tutors.append(tutor_items)
     mycursor.close()
     close_db_connection(mydb, "User")
     return tutors
+
+def post_history_user(data: HistorySchema, email):
+    uid = uuid.uuid4().hex
+    Userid = check_user_id(email)
+    title = data.title
+    tutorId = data.tutorId
+    date = data.Date
+    status = data.status
+    TutorName = get_tutor_name(data.tutorId)
+
+    mydb=defineDB()
+    mycursor = mydb.cursor()
+    query = ("INSERT INTO History_Session (id, session_name, UserId, TutorId, Tutor_name ,status, Date) VALUES (%s, %s, %s, %s, %s, %s, %s)")
+    res = (uid, title, Userid, tutorId, TutorName, status, date)
+    mycursor.execute(query, res)
+    mydb.commit()
+    mycursor.close()
+    close_db_connection(mydb, "User")
+    return {
+        "id":uid,
+        "TutorName":TutorName,
+        "session_name":title,
+        "status": status,
+        "date":date
+    }

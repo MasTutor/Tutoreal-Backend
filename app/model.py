@@ -1,3 +1,4 @@
+from datetime import date
 from pydantic import BaseModel, Field, EmailStr
  
 
@@ -110,3 +111,19 @@ class ReplySchema (BaseModel):
             }
 
         }
+
+class HistorySchema (BaseModel):
+    tutorId : str = Field(default=None)
+    title : str = Field(default=None)
+    status : str = Field(default="OnGoing")
+    Date : date = Field(default=None)
+    class Config:
+        schema_extra = {
+            "post_demo" : {
+                "TutorId" : "1",
+                "Status" : "OnGoing",
+                "title" : "kerja lembur",
+                "Date" : "12-12-12"
+            }
+        }
+

@@ -208,12 +208,12 @@ async def get_history(request: Request):
         return {
             "error":"false",
             "message":"successfully fetching user data",
-            "user_data":get_history_user(jsonResponse["userID"])
+            "history_data":get_history_user(jsonResponse["userID"])
             }
     except: raise HTTPException(status_code=469, detail="AUTH NOT REAL SIR (´。＿。｀)")
     
 @app.post("/user/new-history", dependencies=[Depends(jwtBearer())], tags=["history"])
-async def post_history(request: Request, user : UserSchema = Body(...)):
+async def post_history(request: Request, post : HistorySchema = Body(...)):
     authHead = request.headers["Authorization"]
     authToken = authHead.split(" ")[1]
     jsonResponse = decode_user(authToken)
@@ -221,7 +221,7 @@ async def post_history(request: Request, user : UserSchema = Body(...)):
         return {
             "error":"false",
             "message":"successfully fetching user data",
-            "user_data":get_profile_user(jsonResponse["userID"])
+            "history_data":post_history_user(post, jsonResponse["userID"])
             }
     else:
         raise HTTPException(status_code=404, detail="User not Found sir 🗿")
