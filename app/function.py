@@ -277,10 +277,10 @@ def get_history_user(email):
     for x in myresult:
         tutor_items = {
             "id":x[0],
-            "TutorName":x[3],
+            "TutorName":x[4],
             "SessionName":x[1],
-            "status":x[4],
-            "Date":x[5]
+            "status":x[5],
+            "Date":x[6]
         }
         tutors.append(tutor_items)
     mycursor.close()
