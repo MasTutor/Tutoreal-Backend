@@ -315,7 +315,7 @@ def post_history_user(data: HistorySchema, email):
 def put_profile_user(data: UserSchema, email):
     name = data.fullname
     photoURL = data.PhotoURL
-    password = data.password
+    password = password_encryption(data.password)
     gender = data.hasPenis
     mydb=defineDB()
     mycursor = mydb.cursor()
