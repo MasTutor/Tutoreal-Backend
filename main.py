@@ -200,31 +200,15 @@ async def get_profile(request: Request):
 
 @app.put("/user/editprofile", dependencies=[Depends(jwtBearer())], tags=["profile"])
 async def put_profile(request: Request, user : UserSchema = Body(...)):
-    try:
+
         authorization_header = request.headers["Authorization"]
         token2 = authorization_header.split(" ")[1]
         jsonResponse = decode_user(token2)
         return {
-            "error":"false",
-            "message":"successfully fetching user data",
-            "user_data":put_profile_user(jsonResponse["userID"])
+            "user_data":put_profile_user(user,jsonResponse["userID"])
             }
         
-        
-    except: raise HTTPException(status_code=469, detail="AUTH NOT REAL SIR (´。＿。｀)")
-
-
-
-    users.append(user)
-    if push_user(user):
-        return {
-            "error":"false",
-            "message":"User Created",
-            "signupToken":signJWT(user.email)
-            }
-    else:
-        raise HTTPException(status_code=409, detail="Bro the email already registered 💀")
-
+    
 
 @app.get("/user/history", dependencies=[Depends(jwtBearer())], tags=["history"])
 async def get_history(request: Request):

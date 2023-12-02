@@ -312,5 +312,17 @@ def post_history_user(data: HistorySchema, email):
         "date":date
     }
 
-def get_profile_user(data: UserSchema, email):
-    mydb=defineDB
+def put_profile_user(data: UserSchema, email):
+    name = data.fullname
+    photoURL = data.PhotoURL
+    password = data.password
+    gender = data.hasPenis
+    mydb=defineDB()
+    mycursor = mydb.cursor()
+    query = ("UPDATE User SET Nama = %s, Picture = %s, Password = %s, hasPenis = %s WHERE email = %s")
+    res = (name, photoURL, password, gender, email)
+    mycursor.execute(query, res)
+    mydb.commit()
+    mycursor.close()
+    close_db_connection(mydb, "User")
+    return f"error false, succesfully edit {name}'s data"
