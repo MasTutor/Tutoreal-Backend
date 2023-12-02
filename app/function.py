@@ -115,7 +115,7 @@ def check_user_id(email):
     close_db_connection(mydb, "User")
     if (len(myresult) == 1):
         res_id = myresult[0][0]
-            return res_id
+        return res_id
     return False
 
 
