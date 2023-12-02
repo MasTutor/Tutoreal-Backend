@@ -224,4 +224,4 @@ async def post_history(request: Request, post : HistorySchema = Body(...)):
             "history_data":post_history_user(post, jsonResponse["userID"])
             }
     else:
-        raise HTTPException(status_code=404, detail="User not Found sir 🗿")
+        raise HTTPException(status_code=425, detail="unexpected error, check your date format, auth, and ur life decision bro 🗿")
