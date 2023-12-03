@@ -199,7 +199,8 @@ def get_tutor_by_id(id_Tutor):
             "Categories":x[6],
             "AboutMe":x[8],
             "SkillsAndExperiences":x[9],
-            "picture":x[10]
+            "picture":x[10],
+            "price":x[11]
         }
     mycursor.close()
     close_db_connection(mydb, "User")
