@@ -323,7 +323,7 @@ def post_history_user(data: HistorySchema, email):
         "date":date
     }
 
-def put_profile_user(data: UserSchema, email):
+def put_profile_user(data: UserUpdateSchema, email):
     old = get_profile_user_List(email)
     uuid = old[0][0]
     if (data.fullname == None):
@@ -342,12 +342,16 @@ def put_profile_user(data: UserSchema, email):
         password = old[0][9]
     elif(data.password != None):
         password = password_encryption(data.password)
+    if (data.noTelp == None):
+        noTelp = old[0][3]
+    elif(data.noTelp != None):
+        noTelp = data.noTelp
 
     old = None
     mydb=defineDB()
     mycursor = mydb.cursor()
-    query = ("UPDATE User SET Nama = %s, Picture = %s, Password = %s, hasPenis = %s WHERE email = %s")
-    res = (name, photoURL, password, gender, email)
+    query = ("UPDATE User SET Nama = %s, Picture = %s, Password = %s, hasPenis = %s, NoTelp = %s WHERE email = %s")
+    res = (name, photoURL, password, gender,noTelp, email)
     mycursor.execute(query, res)
     mydb.commit()
     mycursor.close()
@@ -364,7 +368,7 @@ def put_profile_user(data: UserSchema, email):
                 "email": email,
                 "gender": gender,
                 "photoURL": photoURL,
-                "noTelp": ""
+                "noTelp": noTelp
              }
     }
             

@@ -199,7 +199,7 @@ async def get_profile(request: Request):
     except: raise HTTPException(status_code=469, detail="AUTH NOT REAL SIR (´。＿。｀)")
 
 @app.put("/user/editprofile", dependencies=[Depends(jwtBearer())], tags=["profile"])
-async def put_profile(request: Request, user : UserSchema = Body(...)):
+async def put_profile(request: Request, user : UserUpdateSchema = Body(...)):
 
         authorization_header = request.headers["Authorization"]
         token2 = authorization_header.split(" ")[1]
