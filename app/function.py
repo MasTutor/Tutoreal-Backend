@@ -67,6 +67,7 @@ def get_profile_user(email):
     mycursor.execute("SELECT * FROM User WHERE email= %s", res)
     myresult = mycursor.fetchall()
     mycursor.close()
+    close_db_connection(mydb, "User")
     result_uid = myresult[0][0]
     result_email = myresult[0][1]
     result_nama = myresult[0][2]
@@ -82,6 +83,15 @@ def get_profile_user(email):
         "noTelp":result_number
     }
 
+def get_profile_user_List(email):
+    mydb=defineDB()
+    mycursor = mydb.cursor()
+    res = (email,)
+    mycursor.execute("SELECT * FROM User WHERE email= %s", res)
+    myresult = mycursor.fetchall()
+    mycursor.close()
+    close_db_connection(mydb, "User")
+    return myresult
 
 
 def check_user(data: UserLoginSchema):
@@ -314,10 +324,26 @@ def post_history_user(data: HistorySchema, email):
     }
 
 def put_profile_user(data: UserSchema, email):
-    name = data.fullname
-    photoURL = data.PhotoURL
-    password = password_encryption(data.password)
-    gender = data.hasPenis
+    old = get_profile_user_List(email)
+    uuid = old[0][0]
+    if (data.fullname == None):
+        name = old[0][2]
+    elif (data.fullname != None):
+        name = data.fullname
+    if (data.hasPenis == None):
+        gender = old[0][4]
+    elif (data.hasPenis != None):
+        gender = data.hasPenis
+    if (data.PhotoURL == None):
+        photoURL = old[0][6]
+    elif (data.PhotoURL != None):
+        photoURL = data.PhotoURL
+    if (data.password == None):
+        password = old[0][9]
+    elif(data.password != None):
+        password = password_encryption(data.password)
+
+    old = None
     mydb=defineDB()
     mycursor = mydb.cursor()
     query = ("UPDATE User SET Nama = %s, Picture = %s, Password = %s, hasPenis = %s WHERE email = %s")
@@ -326,4 +352,15 @@ def put_profile_user(data: UserSchema, email):
     mydb.commit()
     mycursor.close()
     close_db_connection(mydb, "User")
-    return f"error false, succesfully edit {name}'s data"
+    return {"error":"false",
+            "message":"successfully updating user data",
+            "user_data": {
+                "uid": uuid,
+                "nama": name,
+                "email": email,
+                "gender": gender,
+                "photoURL": photoURL,
+                "noTelp": ""
+             }
+    }
+            
