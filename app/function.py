@@ -352,6 +352,10 @@ def put_profile_user(data: UserSchema, email):
     mydb.commit()
     mycursor.close()
     close_db_connection(mydb, "User")
+    if (gender==True):
+        gender = 1
+    elif (gender==False):
+        gender = 0
     return {"error":"false",
             "message":"successfully updating user data",
             "user_data": {
