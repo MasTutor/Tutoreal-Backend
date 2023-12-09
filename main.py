@@ -204,10 +204,9 @@ async def put_profile(request: Request, user : UserUpdateSchema = Body(...)):
         authorization_header = request.headers["Authorization"]
         token2 = authorization_header.split(" ")[1]
         jsonResponse = decode_user(token2)
-        return {
-            "user_data":put_profile_user(user,jsonResponse["userID"])
-            }
-        
+        return put_profile_user(user,jsonResponse["userID"])
+            
+    
     
 
 @app.get("/user/history", dependencies=[Depends(jwtBearer())], tags=["history"])
