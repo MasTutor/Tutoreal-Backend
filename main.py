@@ -6,6 +6,7 @@ from app.auth.jwt_handler import *
 from google.cloud import storage
 from dotenv import load_dotenv
 from app.model import *
+import numpy as tf
 from io import BytesIO
 import mysql.connector
 from app.function import *
