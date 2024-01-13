@@ -1,15 +1,17 @@
 from fastapi import FastAPI, Body, Depends, File, UploadFile, Request, HTTPException
 from fastapi.responses import FileResponse
 from fastapi_pagination import Page, add_pagination, paginate, Params
-from app.auth.jwt_bearer import jwtBearer
-from app.auth.jwt_handler import *
+from api.auth.jwt_bearer import jwtBearer
+from api.auth.jwt_handler import *
 from google.cloud import storage
 from dotenv import load_dotenv
-from app.model import *
+from api.model import *
+from api.personality.clustering import *
+from api.personality.pca import *
 import numpy as tf
 from io import BytesIO
 import mysql.connector
-from app.function import *
+from api.function import *
 from PIL import Image
 import requests
 import uvicorn
@@ -237,3 +239,17 @@ async def post_history(request: Request, post : HistorySchema = Body(...)):
                 }
     except: raise HTTPException(status_code=425, detail="unexpected error, check your date format, auth, and ur life decision bro 🗿")
     
+@app.post("/user/personality", dependencies=[Depends(jwtBearer())], tags=["personality"])
+def post_personality(request: Request, Personality: PersonaSchema = Body(...)):
+    authHead = request.headers["Authorization"]
+    authToken = authHead.split(" ")[1]
+    email = decode_user(authToken)["userID"]
+    return post_answer(Personality.Persona ,email)
+
+
+@app.get("/user/matchmaking", dependencies=[Depends(jwtBearer())], tags=["personality"])
+def post_personality(request: Request):
+    authHead = request.headers["Authorization"]
+    authToken = authHead.split(" ")[1]
+    email = decode_user(authToken)["userID"]
+    return master_function(email, 'Science')

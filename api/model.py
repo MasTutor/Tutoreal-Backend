@@ -145,4 +145,13 @@ class HistorySchema (BaseModel):
                 "Date" : "12-12-12"
             }
         }
+        
+class PersonaSchema (BaseModel):
+    Persona : str = Field(default=None)
+    class Config:
+        schema_extra = {
+            "post_demo" : {
+                "list":"[1,2,3,4,5,3,4,5,6,4,3,3,2,3]"
+            }
+        }
 

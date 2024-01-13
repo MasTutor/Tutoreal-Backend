@@ -13,3 +13,5 @@ cloud-sql-python-connector
 streamlit
 cryptography
 fastapi_pagination
+pandas
+scikit-learn

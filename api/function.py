@@ -1,15 +1,15 @@
 from fastapi import FastAPI, Body, Depends, File, UploadFile, Request
 from fastapi.responses import FileResponse
-from app.auth.jwt_bearer import jwtBearer
-from app.auth.jwt_handler import *
+from api.auth.jwt_bearer import jwtBearer
+from api.auth.jwt_handler import *
 from google.cloud import storage
 from dotenv import load_dotenv
-from app.encryptor import *
-from app.model import *
+from api.encryptor import *
+from api.model import *
 from io import BytesIO
 import mysql.connector
-from app.function import *
-from app.db import *
+from api.function import *
+from api.db import *
 from PIL import Image
 import requests
 import uvicorn
@@ -197,6 +197,30 @@ def get_tutor_by_id(id_Tutor):
     mycursor = mydb.cursor()
     res = (id_Tutor,)
     mycursor.execute("SELECT * FROM Tutor WHERE id = %s ORDER BY id + 0 asc", res)
+    myresult = mycursor.fetchall()
+    for x in myresult:
+        tutor_items = {
+            "id":x[0],
+            "UserId":x[1],
+            "Nama":x[2],
+            "hasPenis":x[3],
+            "AgesRanges":x[4],
+            "Specialization":x[5],
+            "Categories":x[6],
+            "AboutMe":x[8],
+            "SkillsAndExperiences":x[9],
+            "picture":x[10],
+            "price":x[11]
+        }
+    mycursor.close()
+    close_db_connection(mydb, "User")
+    return tutor_items
+
+def get_tutor_by_name(name_Tutor):
+    mydb=defineDB()
+    mycursor = mydb.cursor()
+    res = (name_Tutor,)
+    mycursor.execute("SELECT * FROM Tutor WHERE Nama = %s ORDER BY id + 0 asc", res)
     myresult = mycursor.fetchall()
     for x in myresult:
         tutor_items = {
