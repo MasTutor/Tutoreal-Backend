@@ -248,8 +248,8 @@ def post_personality(request: Request, Personality: PersonaSchema = Body(...)):
 
 
 @app.get("/user/matchmaking", dependencies=[Depends(jwtBearer())], tags=["personality"])
-def post_personality(request: Request):
+def post_personality(request: Request,category: str):
     authHead = request.headers["Authorization"]
     authToken = authHead.split(" ")[1]
     email = decode_user(authToken)["userID"]
-    return master_function(email, 'Science')
+    return master_function(email, category)
