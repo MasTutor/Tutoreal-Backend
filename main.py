@@ -7,10 +7,8 @@ from google.cloud import storage
 from dotenv import load_dotenv
 from api.model import *
 from api.personality.clustering import *
-from api.personality.pca import *
 import numpy as tf
 from io import BytesIO
-import mysql.connector
 from api.function import *
 from PIL import Image
 import requests
@@ -248,8 +246,23 @@ def post_personality(request: Request, Personality: PersonaSchema = Body(...)):
 
 
 @app.get("/user/matchmaking", dependencies=[Depends(jwtBearer())], tags=["personality"])
-def post_personality(request: Request,category: str):
+def get_matchmaking(request: Request,category: str):
     authHead = request.headers["Authorization"]
     authToken = authHead.split(" ")[1]
     email = decode_user(authToken)["userID"]
-    return master_function(email, category)
+    # Define the API endpoint
+    url = os.getenv("pca_url")
+
+    # Define the headers
+    params = {
+        "email": email,
+        "category": category
+    }
+
+    # Send the GET request
+    response = requests.get(url, params=params)
+
+    # Print the response
+    return response.json()
+
+    
